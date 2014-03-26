@@ -63,9 +63,11 @@ arg = e:exp COMA a:arg { return tree(e,a);}
         / e:exp {return e}
 
 
-st     = i:ID ASSIGN e:exp            
+st     = CALL r:ID 
+           {return {type:'CALL', right: r}; } 
+       / i:ID ASSIGN e:exp            
             { return {type: '=', left: i, right: e}; }
-       / IF e:exp THEN st:st ELSE sf:st
+       / IF e:cond THEN st:st ELSE sf:st
            {
              return {
                type: 'IFELSE',
@@ -74,7 +76,7 @@ st     = i:ID ASSIGN e:exp
                sf: sf,
              };
            }
-       / IF e:exp THEN st:st    
+       / IF e:cond THEN st:st    
            {
              return {
                type: 'IF',
@@ -82,6 +84,35 @@ st     = i:ID ASSIGN e:exp
                st: st
              };
            }
+       / BEGIN stt:st ar:(DOTT st)* END
+           {
+             var r = [stt];
+             for ( var k = 0; k < ar.length; k++)
+               r.push(ar[k][1]);
+             return r;
+           }
+       / WHILE c:cond DO s:st
+          {
+            return {
+               type: 'WHILE',
+               condicion: c,
+               stat: s
+            };
+          }
+
+cond   = ODD e:exp {
+         return{
+           type: 'ODD',
+           cond: e
+           }
+         }
+       / e:exp t:COMPARISON ee:exp { 
+         return {
+            type: t,
+            left: e,
+            right: ee
+         }; 
+         }
 exp    = t:term   r:(ADD term)*   { return tree(t,r); }
 term   = f:factor r:(MUL factor)* { return tree(f,r); }
 
@@ -91,9 +122,11 @@ factor = NUMBER
 
 _ = $[ \t\n\r]*
 
+COMPARISON = _ op:('==' / [#|<|<=|>|>=]) _ { return op; }
 ASSIGN   = _ op:'=' _  { return op; }
 ADD      = _ op:[+-] _ { return op; }
 MUL      = _ op:[*/] _ { return op; }
+
 DOT      = _"."_
 DOTT     = _";"_
 COMA     = _","_
@@ -105,6 +138,12 @@ PROCEDURE= _"procedure"_
 IF       = _ "if" _
 THEN     = _ "then" _
 ELSE     = _ "else" _
+CALL     = _ "call" _
+BEGIN    = _ "begin" _
+END      = _ "end" _
+WHILE    = _ "while" _ 
+DO       = _ "do" _
+ODD      = _ "odd" _
 ID       = _ id:$([a-zA-Z_][a-zA-Z_0-9]*) _ 
             { 
               return { type: 'ID', value: id }; 
