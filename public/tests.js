@@ -44,7 +44,7 @@ suite( 'Analizador sintáctico con PEGJS', function(){  //Suite equivale al desc
     } catch (e) {
       result = (String(e));
     }
-    assert.deepEqual(result, "");
+    assert.deepEqual(result, 'SyntaxError: Expected ",", ";" or [ \\t\\n\\r] but "=" found.');
   });
   
 });
