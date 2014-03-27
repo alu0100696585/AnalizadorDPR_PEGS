@@ -1,25 +1,27 @@
 $red: #903;
 $black: #444;
 $white: #fff;
-$blue: #002EB8;
+$blue: #58D3F7;
 $main-font: Helvetica, Arial, sans-serif;
 
 body {
   font-family: $main-font;
+  background: #58D3F7;
 }
 
 h1 {
-  color: $red;
+  color: $blue;
   font: 32px/1 $main-font;
 }
 
 header h1 {
   font-size: 40px;
   line-height: 80px;
-  background: transparent url(/images/logo.png) 0 0 no-repeat;
+  background: $white url(/images/logo.png) no-repeat;
   background-size:5% 70%;
   padding-left: 84px;
 }
+
 
 @mixin tabs ($background: blue, $color: yellow) {
   ul {
