@@ -18,7 +18,7 @@ suite( 'Analizador sintáctico con PEGJS', function(){  //Suite equivale al desc
   });
   
   test('Constructor de bloque', function(){  
-    var result = pl0.parse("procedure sum ( u ) j = u + 8; sum = u.");
+    var result = pl0.parse("procedure sum ( u ); j = u + 8; call sum (u).");
     assert.deepEqual(JSON.stringify(result,undefined,2), "");
   });
   
