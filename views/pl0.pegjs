@@ -52,19 +52,27 @@ for ( var k = 0; k < i.length; k++)
 return r;
 }
 
-proc = PROCEDURE id:ID DOTT b:block DOTT{
+proc = PROCEDURE id:ID a:(arg)? DOTT  b:block DOTT{
+if (a)
+return { type: "PROCEDURE", name: id, argumentos: a, subrutina: b[1]}
+else
 return { type: "PROCEDURE", name: id, subrutina: b[1]}
 }
 assin = i:ID ASSIGN e:exp {return {type: '=', left: i, right: e}; }
 
-statement = 
-
-arg = e:exp COMA a:arg { return tree(e,a);}
-        / e:exp {return e}
 
 
-st     = CALL r:ID 
-           {return {type:'CALL', right: r}; } 
+arg = LEFTPAR e:exp  a:(COMA exp)* RIGHTPAR{
+var r = new Array();
+r.push(e);
+for (var i = 0; i < a.length; i++)
+     r.push(a[i][1]);
+return {lista: r}
+}
+
+
+st     = CALL r:ID a:(arg)?
+           {return {type:'CALL', argumentos: a, right: r }; } 
        / i:ID ASSIGN e:exp            
             { return {type: '=', left: i, right: e}; }
        / IF e:cond THEN st:st ELSE sf:st
@@ -126,7 +134,6 @@ COMPARISON = _ op:('==' / [#|<|<=|>|>=]) _ { return op; }
 ASSIGN   = _ op:'=' _  { return op; }
 ADD      = _ op:[+-] _ { return op; }
 MUL      = _ op:[*/] _ { return op; }
-
 DOT      = _"."_
 DOTT     = _";"_
 COMA     = _","_
