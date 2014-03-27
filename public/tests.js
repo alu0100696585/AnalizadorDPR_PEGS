@@ -38,7 +38,13 @@ suite( 'Analizador sintáctico con PEGJS', function(){  //Suite equivale al desc
   });
   
   test('Error gramatico', function(){  
-    assert.throws(pl0.parse("var i = 0, u = 9."));
+    try {
+      var result = pl0.parse("var i = 0, u = 9.");
+      result = (JSON.stringify(result,undefined,2));
+    } catch (e) {
+      result = (String(e));
+    }
+    assert.deepEqual(result, "");
   });
   
 });
