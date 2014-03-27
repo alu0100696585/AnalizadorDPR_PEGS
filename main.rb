@@ -38,6 +38,10 @@ get '/:selected?' do |selected|
       :locals => { :programs => programs, :source => source }
 end
 
+get '/test' do
+  erb :test
+end
+
 post '/save' do
   pp params
   name = params[:fname]
