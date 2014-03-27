@@ -1,7 +1,12 @@
 <h1>Analizador de PL0 ampliado usando PEG.js</h1>
 <div id="content">
   <p class="loadfile">
-    <input type="file" id="examples" />
+    <div>
+	<label class = "Selboton">
+ 	  Examinar ...
+	  <input type="file" id="examples" />
+	</label>
+    </div>
   </p>
   <p>
   <nav>
@@ -12,9 +17,12 @@
   </ul>
   </nav>
   <table>
+    <br/>
+    <br/>
     <tr>
       <td>
-        <form action="/save" method="post">
+        <form action="/save" method="post"> 
+          <br/>
           <textarea id="input" name="input" 
                     autofocus cols = "40" rows = "4">
 <%= source %>
@@ -25,7 +33,7 @@
                  title="name" pattern="\w+" />
         </form>
       </td>
-      <td><button id="parse" type="button">parse</button></td>
+      <td><button class="parseboton" id="parse" type="button">parse</button></td>
     </tr>
   </table>
   </p>
@@ -35,6 +43,36 @@
     </pre>
   </div>
 </div>
+
+<script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("input"), {
+        lineNumbers: true,
+        viewportMargin: Infinity,
+        mode: "text/x-pascal"
+      });
+
+    
+      function dump(fileName) {
+        $.get(fileName, function (data) {
+          $("#input").val(data);
+            editor.setValue(data);
+        });
+      };
+      
+      document.getElementById('files').addEventListener('change', CopyMe, false);
+
+        function CopyMe(evt) {
+          var file = evt.target.files[0];
+          if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) { 
+              editor.setValue(e.target.result);
+            }
+            var c = reader.readAsText(file);
+          }
+          else { alert("Failed to load file"); }
+        }
+   </script>
 
 <script src="pl0.js"></script>
 <script src="main.js"></script>
