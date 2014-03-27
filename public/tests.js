@@ -19,7 +19,7 @@ suite( 'Analizador sintáctico con PEGJS', function(){  //Suite equivale al desc
   
   test('Constructor de bloque', function(){  
     var result = pl0.parse("procedure sum ( u ); j = u + 8; call sum (u).");
-    assert.deepEqual(JSON.stringify(result,undefined,2), "");
+    assert.deepEqual(JSON.stringify(result,undefined,2), '{\n  "type": "PROGRAM",\n  "bloque": [\n    [\n      {\n        "type": "PROCEDURE",\n        "name": {\n          "type": "ID",\n          "value": "sum"\n        },\n        "argumentos": {\n          "lista": [\n            {\n              "type": "ID",\n              "value": "u"\n            }\n          ]\n        },\n        "subrutina": {\n          "type": "=",\n          "left": {\n            "type": "ID",\n            "value": "j"\n          },\n          "right": {\n            "type": "+",\n            "left": {\n              "type": "ID",\n              "value": "u"\n            },\n            "right": {\n              "type": "NUM",\n              "value": 8\n            }\n          }\n        }\n      }\n    ],\n    {\n      "type": "CALL",\n      "argumentos": {\n        "lista": [\n          {\n            "type": "ID",\n            "value": "u"\n          }\n        ]\n      },\n      "right": {\n        "type": "ID",\n        "value": "sum"\n      }\n    }\n  ]\n}');
   });
   
   test('Constructor de statement', function(){  
