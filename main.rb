@@ -28,6 +28,10 @@ get '/grammar' do
   erb :grammar
 end
 
+get '/test' do
+  erb :test
+end
+
 get '/:selected?' do |selected|
   programs = PL0Program.all
   pp programs
@@ -36,10 +40,6 @@ get '/:selected?' do |selected|
   source = if c then c.source else "a = 3-2-1" end
   erb :index, 
       :locals => { :programs => programs, :source => source }
-end
-
-get '/test' do
-  erb :test
 end
 
 post '/save' do
