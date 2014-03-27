@@ -20,16 +20,33 @@ Recuerde que un PEG $G$ es una cuaterna $G =(\Sigma,V,P,S)$.
   $V$ que se denomina <i>expresión de arranque</i>.
 </ol>
 <ol>
-  <li> $\Sigma = \{ if, then, else, =, +, -, *, /, (, ), 0 \ldots 9 \}$, 
+  <li> $\Sigma = \{ if, then, else,  =, +, -, *, /, (, ), 0 \ldots 9 \}$, 
   <li> $V = \{ st, exp, term, factor \} \cup$ <br />
-  $\{ASSIGN, ADD, MUL, LEFTPAR, RIGHTPAR \} \cup$ <br />
-  $\{IF, THEN, ELSE, ID, NUMBER, \_ \}$
+  $\{ASSIGN, ADD, MUL, LEFTPAR, RIGHTPAR, DOT, DOTT, COMA, COMPARISON \} \cup$ <br />
+  $\{IF, THEN, ELSE, ID, NUMBER, CALL, PROCEDURE, CONST, VAR, BEGIN, DO, WHILE, ODD, \_ \}$
   <li> Reglas de Análisis:
   <ol>
 <pre>
+block  = (const)? (var)? (proc)* s:st
+
+const  = CONST assin (COMA assin)* DOTT 
+var    = VAR ID (COMA ID)* DOTT
+proc   = PROCEDURE ID (arg)? DOTT block DOTT
+
+arg    = LEFTPAR exp  (COMA exp)* RIGHTPAR
+
+
+
 st     = ID ASSIGN exp
        / IF exp THEN st ELSE st
        / IF exp THEN st
+       / CALL ID (arg)?
+       / BEGIN st (DOTT st)* END
+       / WHILE cond DO st
+       
+cond   = ODD exp
+       / exp COMPARISON exp
+       
 exp    = term   (ADD term)*
 term   = factor (MUL factor)*
 
@@ -39,19 +56,32 @@ factor = NUMBER
 
 _ = $[ \t\n\r]*
 
-ASSIGN   = _ '=' _
+COMPARISON = _ ('==' / [#|<|<=|>|>=]) _
+ASSIGN   = _ '=' _ 
 ADD      = _ [+-] _
-MUL      = _ [*/] _
+MUL      = _ [*/] _ 
+DOT      = _"."_
+DOTT     = _";"_
+COMA     = _","_
 LEFTPAR  = _"("_
 RIGHTPAR = _")"_
+VAR      = _"var"_
+CONST    = _"const"_
+PROCEDURE= _"procedure"_
 IF       = _ "if" _
 THEN     = _ "then" _
 ELSE     = _ "else" _
+CALL     = _ "call" _
+BEGIN    = _ "begin" _
+END      = _ "end" _
+WHILE    = _ "while" _ 
+DO       = _ "do" _
+ODD      = _ "odd" _
 ID       = _ [a-zA-Z_][a-zA-Z_0-9]* _
 NUMBER   = _ [0-9]+ _
 </pre>
   </ol>
-  <li> Expresión de arranque: $st$
+  <li> Expresión de arranque: $program$
 </ol>
 <BR>
 <BR>
