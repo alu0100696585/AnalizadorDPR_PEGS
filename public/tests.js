@@ -36,4 +36,10 @@ suite( 'Analizador sintáctico con PEGJS', function(){  //Suite equivale al desc
     var result = pl0.parse("A = 3 * 4 + 2.");
     assert.deepEqual(JSON.stringify(result,undefined,2), '{\n  "type": "PROGRAM",\n  "bloque": [\n    [],\n    {\n      "type": "=",\n      "left": {\n        "type": "ID",\n        "value": "A"\n      },\n      "right": {\n        "type": "+",\n        "left": {\n          "type": "*",\n          "left": {\n            "type": "NUM",\n            "value": 3\n          },\n          "right": {\n            "type": "NUM",\n            "value": 4\n          }\n        },\n        "right": {\n          "type": "NUM",\n          "value": 2\n        }\n      }\n    }\n  ]\n}');
   });
+  
+  test('Error gramatico', function(){  
+    var result = pl0.parse("var i = 0, u = 9.");
+    assert.deepEqual(JSON.stringify(result,undefined,2), "");
+  });
+  
 });
