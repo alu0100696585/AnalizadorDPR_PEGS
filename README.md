@@ -1,4 +1,5 @@
 Práctica: Analizador Descendente Predictivo Recursivo PEGS
+----------------------------------------------------------------------------------------------------------
 
  ----> 1 Objetivo de la práctica
 
@@ -6,7 +7,7 @@ El objetivo de la práctica consiste en realizar un analizador sintáctico recur
 
  ----> 2 Acceso a la página web
 
-------------------------------------------------
+http://analizadorpegs2.herokuapp.com
 
  ----> 3 Autores
 
